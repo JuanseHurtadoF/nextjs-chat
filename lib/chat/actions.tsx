@@ -34,6 +34,7 @@ import {
 } from '@/lib/utils'
 import { SpinnerMessage, UserMessage } from '@/components/stocks/message'
 import { Chat } from '@/lib/types'
+import { createClient } from '../supabase/server'
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || ''
@@ -563,49 +564,61 @@ export const AI = createAI<AIState, UIState>({
   },
   initialUIState: [],
   initialAIState: { chatId: nanoid(), messages: [] },
-  // unstable_onGetUIState: async () => {
-  //   'use server'
+  unstable_onGetUIState: async () => {
+    'use server'
 
-  //   // const session = await auth()
+    const supabase = createClient()
 
-  //   // if (session && session.user) {
-  //   //   const aiState = getAIState()
+    const {
+      data: { user }
+    } = await supabase.auth.getUser()
 
-  //   //   if (aiState) {
-  //   //     const uiState = getUIStateFromAIState(aiState)
-  //   //     return uiState
-  //   //   }
-  //   // } else {
-  //   //   return
-  //   // }
-  // },
-  // unstable_onSetAIState: async ({ state, done }) => {
-  //   'use server'
+    // If user is already logged in, redirect to home page
 
-  //   const session = await auth()
+    if (user) {
+      const aiState = getAIState()
 
-  //   if (session && session.user) {
-  //     const { chatId, messages } = state
+      if (aiState) {
+        const uiState = getUIStateFromAIState(aiState)
+        return uiState
+      }
+    } else {
+      return
+    }
+  },
+  unstable_onSetAIState: async ({ state, done }) => {
+    'use server'
 
-  //     const createdAt = new Date()
-  //     const userId = session.user.id as string
-  //     const path = `/chat/${chatId}`
-  //     const title = messages[0].content.substring(0, 100)
+    const supabase = createClient()
 
-  //     const chat: Chat = {
-  //       id: chatId,
-  //       title,
-  //       userId,
-  //       createdAt,
-  //       messages,
-  //       path
-  //     }
+    const {
+      data: { user }
+    } = await supabase.auth.getUser()
 
-  //     await saveChat(chat)
-  //   } else {
-  //     return
-  //   }
-  // }
+    // If user is already logged in, redirect to home page
+
+    if (user) {
+      const { chatId, messages } = state
+
+      const createdAt = new Date()
+      const userId = user.id as string
+      const path = `/chat/${chatId}`
+      const title = messages[0].content.substring(0, 100)
+
+      const chat: Chat = {
+        id: chatId,
+        title,
+        userId,
+        createdAt,
+        messages,
+        path
+      }
+
+      await saveChat(chat)
+    } else {
+      return
+    }
+  }
 })
 
 export const getUIStateFromAIState = (aiState: Chat) => {

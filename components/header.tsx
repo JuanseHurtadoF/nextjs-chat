@@ -34,7 +34,6 @@ function UserOrLogin() {
       console.error(error)
       return
     }
-    console.log(data)
   }
 
   useEffect(() => {

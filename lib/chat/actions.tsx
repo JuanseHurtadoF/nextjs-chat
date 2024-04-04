@@ -608,18 +608,35 @@ export const AI = createAI<AIState, UIState>({
       const chat: Chat = {
         id: chatId,
         title,
-        userId,
-        createdAt,
+        user_id: userId,
+        created_at: createdAt,
         messages,
         path
       }
 
-      // await saveChat(chat)
+      // insert chat into supabase
+      // await supabase.from('chats').upsert(chat).throwOnError()
+      await saveChat(chat)
     } else {
       return
     }
   }
 })
+
+const saveChat = async (chat: Chat) => {
+  const supabase = createClient()
+  // Use upsert to either update an existing chat or insert a new one based on chat.id
+  const { data, error } = await supabase
+    .from('chats')
+    .upsert(chat, { onConflict: 'id' }) // Assuming 'id' is the unique identifier/primary key for chats
+    .select()
+
+  if (error) {
+    console.error(error)
+    return
+  }
+  // Optionally, handle the data (for example, logging or further processing)
+}
 
 export const getUIStateFromAIState = (aiState: Chat) => {
   return aiState.messages
@@ -643,6 +660,10 @@ export const getUIStateFromAIState = (aiState: Chat) => {
           ) : message.name === 'getEvents' ? (
             <BotCard>
               <Events props={JSON.parse(message.content)} />
+            </BotCard>
+          ) : message.name === 'showStockSale' ? (
+            <BotCard>
+              <Sale props={JSON.parse(message.content)} />
             </BotCard>
           ) : null
         ) : message.role === 'user' ? (

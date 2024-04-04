@@ -614,7 +614,7 @@ export const AI = createAI<AIState, UIState>({
         path
       }
 
-      await saveChat(chat)
+      // await saveChat(chat)
     } else {
       return
     }

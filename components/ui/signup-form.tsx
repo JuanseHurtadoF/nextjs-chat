@@ -1,17 +1,17 @@
 'use client'
 
 import { useFormState, useFormStatus } from 'react-dom'
-import { authenticate } from '@/app/login/actions'
+import { signup } from '@/app/signup/actions'
 import Link from 'next/link'
 import { useEffect } from 'react'
 import { toast } from 'sonner'
-import { IconSpinner } from './ui/icons'
+import { IconSpinner } from './icons'
 import { getMessageFromCode } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
 
-export default function LoginForm() {
+export default function SignupForm() {
   const router = useRouter()
-  const [result, dispatch] = useFormState(authenticate, undefined)
+  const [result, dispatch] = useFormState(signup, undefined)
 
   useEffect(() => {
     if (result) {
@@ -29,8 +29,8 @@ export default function LoginForm() {
       action={dispatch}
       className="flex flex-col items-center gap-4 space-y-3"
     >
-      <div className="w-full flex-1 rounded-lg border bg-white px-6 pb-4 pt-8 shadow-md  md:w-96 dark:bg-zinc-950">
-        <h1 className="mb-3 text-2xl font-bold">Please log in to continue.</h1>
+      <div className="w-full flex-1 rounded-lg border bg-white px-6 pb-4 pt-8 shadow-md md:w-96 dark:bg-zinc-950">
+        <h1 className="mb-3 text-2xl font-bold">Sign up for an account!</h1>
         <div className="w-full">
           <div>
             <label
@@ -73,11 +73,9 @@ export default function LoginForm() {
         <LoginButton />
       </div>
 
-      <Link
-        href="/signup"
-        className="flex flex-row gap-1 text-sm text-zinc-400"
-      >
-        No account yet? <div className="font-semibold underline">Sign up</div>
+      <Link href="/login" className="flex flex-row gap-1 text-sm text-zinc-400">
+        Already have an account?
+        <div className="font-semibold underline">Log in</div>
       </Link>
     </form>
   )
@@ -91,7 +89,7 @@ function LoginButton() {
       className="my-4 flex h-10 w-full flex-row items-center justify-center rounded-md bg-zinc-900 p-2 text-sm font-semibold text-zinc-100 hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
       aria-disabled={pending}
     >
-      {pending ? <IconSpinner /> : 'Log in'}
+      {pending ? <IconSpinner /> : 'Create account'}
     </button>
   )
 }

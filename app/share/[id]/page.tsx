@@ -4,7 +4,7 @@ import { notFound, redirect } from 'next/navigation'
 import { formatDate } from '@/lib/utils'
 import { getSharedChat } from '@/app/actions'
 import { ChatList } from '@/components/chat/chat-list'
-import { FooterText } from '@/components/footer'
+import { FooterText } from '@/components/footer/footer'
 import { AI, UIState, getUIStateFromAIState } from '@/lib/chat/actions'
 
 export const runtime = 'edge'

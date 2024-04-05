@@ -1,4 +1,4 @@
-import { Header } from '@/components/header'
+import { Header } from '@/components/header/header'
 import { SidebarDesktop } from '@/components/sidebar/sidebar-desktop'
 
 interface ChatLayoutProps {

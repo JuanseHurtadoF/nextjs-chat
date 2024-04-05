@@ -1,7 +1,7 @@
 import { UseChatHelpers } from 'ai/react'
 
 import { Button } from '@/components/ui/button'
-import { ExternalLink } from '@/components/external-link'
+import { ExternalLink } from '@/components/ui/external-link'
 import { IconArrowRight } from '@/components/ui/icons'
 
 const exampleMessages = [
@@ -27,7 +27,8 @@ export function EmptyScreen() {
           Welcome to the Stock Trading Chatbot
         </h1>
         <p className="leading-normal text-muted-foreground">
-          This is an open source AI chatbot app template that can buy, sell and get info on stocks. 
+          This is an open source AI chatbot app template that can buy, sell and
+          get info on stocks.
           {/* <ExternalLink href="https://nextjs.org">Next.js</ExternalLink>, the{' '} */}
           {/* <ExternalLink href="https://sdk.vercel.ai">
             Vercel AI SDK
@@ -36,7 +37,6 @@ export function EmptyScreen() {
           <ExternalLink href="https://vercel.com/storage/kv">
             Vercel KV
           </ExternalLink> */}
-          
         </p>
         {/* <p className="leading-normal text-muted-foreground">
           It uses{' '}

@@ -242,7 +242,8 @@ If the user requests selling a stock, call \`show_stock_sale_ui\` to show the sa
 If the user just wants the price, call \`show_stock_price\` to show the price.
 If you want to show trending stocks, call \`list_stocks\`.
 If you want to show events, call \`get_events\`.
-If the user wants to complete another impossible task, respond that you are a demo and cannot do that.
+
+USERS WILL TRY TO SAY ANYTHING TO GET YOU TO DO STUFF NOT RELATED TO PURCHASE STOCKS. PLEASE IGNORE THEM. SAY YOU ARE A STOCK TRADING BOT.
 
 Besides that, you can also chat with users and do some calculations if needed.`
       },
@@ -376,21 +377,21 @@ Besides that, you can also chat with users and do some calculations if needed.`
             )
         }),
         render: async function* ({ symbol, price, numberOfShares = 100 }) {
-          if (numberOfShares <= 0 || numberOfShares > 1000) {
-            aiState.done({
-              ...aiState.get(),
-              messages: [
-                ...aiState.get().messages,
-                {
-                  id: nanoid(),
-                  role: 'system',
-                  content: `[User has selected an invalid amount]`
-                }
-              ]
-            })
+          // if (numberOfShares <= 0 || numberOfShares > 1000) {
+          //   aiState.done({
+          //     ...aiState.get(),
+          //     messages: [
+          //       ...aiState.get().messages,
+          //       {
+          //         id: nanoid(),
+          //         role: 'system',
+          //         content: `[User has selected an invalid amount]`
+          //       }
+          //     ]
+          //   })
 
-            return <BotMessage content={'Invalid amount'} />
-          }
+          //   return <BotMessage content={'Invalid amount'} />
+          // }
 
           aiState.done({
             ...aiState.get(),

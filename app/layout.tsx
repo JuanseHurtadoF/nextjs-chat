@@ -3,9 +3,9 @@ import { GeistMono } from 'geist/font/mono'
 
 import '@/app/globals.css'
 import { cn } from '@/lib/utils'
-import { TailwindIndicator } from '@/components/tailwind-indicator'
-import { Providers } from '@/components/providers'
-import { Header } from '@/components/header'
+import { TailwindIndicator } from '@/components/ui/tailwind-indicator'
+import { Providers } from '@/components/ui/providers'
+import { Header } from '@/components/header/header'
 import { Toaster } from '@/components/ui/sonner'
 
 export const metadata = {

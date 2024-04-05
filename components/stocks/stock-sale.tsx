@@ -36,7 +36,7 @@ export function Sale({
     // Insert a hidden history info to the list.
     const message = {
       role: 'system' as const,
-      content: `[User has changed to sell ${newValue} shares of ${name}. Total cost: $${(
+      content: `[User has changed to purchase ${newValue} shares of ${name}. Total cost: $${(
         newValue * price
       ).toFixed(2)}]`,
 

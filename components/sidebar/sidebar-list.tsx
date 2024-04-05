@@ -1,6 +1,6 @@
 import { ClearHistory } from '@/components/sidebar/clear-history'
 import { SidebarItems } from '@/components/sidebar/sidebar-items'
-import { ThemeToggle } from '@/components/theme-toggle'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { cache } from 'react'
 
 interface SidebarListProps {

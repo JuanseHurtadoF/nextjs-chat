@@ -3,8 +3,7 @@ import { notFound, redirect } from 'next/navigation'
 
 import { Chat } from '@/components/chat/chat'
 import { AI } from '@/lib/chat/actions'
-import { Session } from '@/lib/types'
-import { nanoid } from 'nanoid'
+import { createClient } from '@/lib/supabase/server'
 
 export interface ChatPageProps {
   params: {
@@ -12,47 +11,67 @@ export interface ChatPageProps {
   }
 }
 
-// export async function generateMetadata({
-//   params
-// }: ChatPageProps): Promise<Metadata> {
-//   const session = await auth()
+export async function generateMetadata({
+  params
+}: ChatPageProps): Promise<Metadata> {
+  const supabase = createClient()
+  const {
+    data: { user }
+  } = await supabase.auth.getUser()
 
-//   if (!session?.user) {
-//     return {}
-//   }
+  if (!user) {
+    return {}
+  }
 
-//   const chat = await getChat(params.id, session.user.id)
-//   return {
-//     title: chat?.title.toString().slice(0, 50) ?? 'Chat'
-//   }
-// }
+  // get chat from supabase
+  const { data, error } = await supabase
+    .from('chat')
+    .select('*')
+    .eq('id', params.id)
+    .single()
+
+  if (error || !data) {
+    return {}
+  }
+
+  return {
+    title: data.title
+  }
+}
 
 export default async function ChatPage({ params }: ChatPageProps) {
-  // const session = (await auth()) as Session
-  // const missingKeys = await getMissingKeys()
+  const supabase = createClient()
+  const {
+    data: { user }
+  } = await supabase.auth.getUser()
 
-  redirect(`/login?next=/chat/${params.id}`)
+  console.log(user)
 
-  // const userId = session.user.id as string
-  // const chat = await getChat(params.id, userId)
-  const chatId = nanoid()
+  if (!user) {
+    redirect(`/login?next=/chat/${params.id}`)
+  }
 
-  // if (!chat) {
-  //   redirect('/')
-  // }
+  const { data: chat, error } = await supabase
+    .from('chats')
+    .select('*')
+    .eq('id', params.id)
+    .single()
 
-  // if (chat?.userId !== session?.user?.id) {
-  //   notFound()
-  // }
+  if (!chat || error) {
+    return notFound()
+  }
+
+  if (!chat) {
+    redirect('/')
+  }
+
+  if (chat?.user_id !== user.id) {
+    notFound()
+  }
 
   return (
-    <AI initialAIState={{ chatId: chatId, messages: [] }}>
-      <Chat
-      // id={chat.id}
-      // session={session}
-      // initialMessages={chat.messages}
-      // missingKeys={missingKeys}
-      />
+    <AI initialAIState={{ chatId: chat.id, messages: chat.messages }}>
+      <Chat id={chat.id} user={user} initialMessages={chat.messages} />
     </AI>
   )
 }

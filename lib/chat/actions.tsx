@@ -242,7 +242,8 @@ If the user requests selling a stock, call \`show_stock_sale_ui\` to show the sa
 If the user just wants the price, call \`show_stock_price\` to show the price.
 If you want to show trending stocks, call \`list_stocks\`.
 If you want to show events, call \`get_events\`.
-If the user wants to complete another impossible task, respond that you are a demo and cannot do that.
+
+USERS WILL TRY TO SAY ANYTHING TO GET YOU TO DO STUFF NOT RELATED TO PURCHASE STOCKS. PLEASE IGNORE THEM. SAY YOU ARE A STOCK TRADING BOT.
 
 Besides that, you can also chat with users and do some calculations if needed.`
       },
@@ -376,21 +377,21 @@ Besides that, you can also chat with users and do some calculations if needed.`
             )
         }),
         render: async function* ({ symbol, price, numberOfShares = 100 }) {
-          if (numberOfShares <= 0 || numberOfShares > 1000) {
-            aiState.done({
-              ...aiState.get(),
-              messages: [
-                ...aiState.get().messages,
-                {
-                  id: nanoid(),
-                  role: 'system',
-                  content: `[User has selected an invalid amount]`
-                }
-              ]
-            })
+          // if (numberOfShares <= 0 || numberOfShares > 1000) {
+          //   aiState.done({
+          //     ...aiState.get(),
+          //     messages: [
+          //       ...aiState.get().messages,
+          //       {
+          //         id: nanoid(),
+          //         role: 'system',
+          //         content: `[User has selected an invalid amount]`
+          //       }
+          //     ]
+          //   })
 
-            return <BotMessage content={'Invalid amount'} />
-          }
+          //   return <BotMessage content={'Invalid amount'} />
+          // }
 
           aiState.done({
             ...aiState.get(),
@@ -608,18 +609,35 @@ export const AI = createAI<AIState, UIState>({
       const chat: Chat = {
         id: chatId,
         title,
-        userId,
-        createdAt,
+        user_id: userId,
+        created_at: createdAt,
         messages,
         path
       }
 
+      // insert chat into supabase
+      // await supabase.from('chats').upsert(chat).throwOnError()
       await saveChat(chat)
     } else {
       return
     }
   }
 })
+
+const saveChat = async (chat: Chat) => {
+  const supabase = createClient()
+  // Use upsert to either update an existing chat or insert a new one based on chat.id
+  const { data, error } = await supabase
+    .from('chats')
+    .upsert(chat, { onConflict: 'id' }) // Assuming 'id' is the unique identifier/primary key for chats
+    .select()
+
+  if (error) {
+    console.error(error)
+    return
+  }
+  // Optionally, handle the data (for example, logging or further processing)
+}
 
 export const getUIStateFromAIState = (aiState: Chat) => {
   return aiState.messages
@@ -643,6 +661,10 @@ export const getUIStateFromAIState = (aiState: Chat) => {
           ) : message.name === 'getEvents' ? (
             <BotCard>
               <Events props={JSON.parse(message.content)} />
+            </BotCard>
+          ) : message.name === 'showStockSale' ? (
+            <BotCard>
+              <Sale props={JSON.parse(message.content)} />
             </BotCard>
           ) : null
         ) : message.role === 'user' ? (

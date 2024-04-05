@@ -1,4 +1,4 @@
-import { Header } from '@/components/header'
+import { Header } from '@/components/header/header'
 import { SidebarDesktop } from '@/components/sidebar/sidebar-desktop'
 
 interface ChatLayoutProps {
@@ -10,7 +10,7 @@ export default async function ChatLayout({ children }: ChatLayoutProps) {
     <>
       <Header />
       <div className="relative flex h-[calc(100vh_-_theme(spacing.16))] overflow-hidden">
-        <SidebarDesktop />
+        {/* <SidebarDesktop /> */}
 
         {children}
       </div>

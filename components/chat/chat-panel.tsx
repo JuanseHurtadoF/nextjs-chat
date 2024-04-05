@@ -1,10 +1,10 @@
 import * as React from 'react'
 
 import { Button } from '@/components/ui/button'
-import { PromptForm } from '@/components/prompt-form'
-import { ButtonScrollToBottom } from '@/components/button-scroll-to-bottom'
+import { PromptForm } from '@/components/chat/prompt-form'
+import { ButtonScrollToBottom } from '@/components/ui/button-scroll-to-bottom'
 import { IconShare } from '@/components/ui/icons'
-import { FooterText } from '@/components/footer'
+import { FooterText } from '@/components/footer/footer'
 import { ChatShareDialog } from '@/components/chat/chat-share-dialog'
 import { useAIState, useActions, useUIState } from 'ai/rsc'
 import type { AI } from '@/lib/chat/actions'

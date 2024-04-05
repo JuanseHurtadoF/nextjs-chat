@@ -7,20 +7,17 @@ import { EmptyScreen } from '@/components/chat/empty-screen'
 import { useLocalStorage } from '@/lib/hooks/use-local-storage'
 import { useEffect, useState } from 'react'
 import { useUIState, useAIState } from 'ai/rsc'
-import { Session } from '@/lib/types'
 import { usePathname, useRouter } from 'next/navigation'
 import { Message } from '@/lib/chat/actions'
 import { useScrollAnchor } from '@/lib/hooks/use-scroll-anchor'
-import { toast } from 'sonner'
-import { Sale } from '../stocks/stock-sale'
 
 export interface ChatProps extends React.ComponentProps<'div'> {
   initialMessages?: Message[]
   id?: string
-  session?: Session
+  user?: any
 }
 
-export function Chat({ id, className, session }: ChatProps) {
+export function Chat({ id, className, user }: ChatProps) {
   const router = useRouter()
   const path = usePathname()
   const [input, setInput] = useState('')
@@ -29,20 +26,20 @@ export function Chat({ id, className, session }: ChatProps) {
 
   const [_, setNewChatId] = useLocalStorage('newChatId', id)
 
-  useEffect(() => {
-    if (session?.user) {
-      if (!path.includes('chat') && messages.length === 1) {
-        window.history.replaceState({}, '', `/chat/${id}`)
-      }
-    }
-  }, [id, path, session?.user, messages])
+  // useEffect(() => {
+  //   if (user) {
+  //     if (!path.includes('chat') && messages.length === 1) {
+  //       window.history.replaceState({}, '', `/chat/${id}`)
+  //     }
+  //   }
+  // }, [id, path, user, messages])
 
-  useEffect(() => {
-    const messagesLength = aiState.messages?.length
-    if (messagesLength === 2) {
-      router.refresh()
-    }
-  }, [aiState.messages, router])
+  // useEffect(() => {
+  //   const messagesLength = aiState.messages?.length
+  //   if (messagesLength === 2) {
+  //     router.refresh()
+  //   }
+  // }, [aiState.messages, router])
 
   useEffect(() => {
     setNewChatId(id)
@@ -50,6 +47,8 @@ export function Chat({ id, className, session }: ChatProps) {
 
   const { messagesRef, scrollRef, visibilityRef, isAtBottom, scrollToBottom } =
     useScrollAnchor()
+
+  console.log(messages)
 
   return (
     <div
@@ -61,7 +60,7 @@ export function Chat({ id, className, session }: ChatProps) {
         ref={messagesRef}
       >
         {messages.length ? (
-          <ChatList messages={messages} isShared={false} session={session} />
+          <ChatList messages={messages} isShared={false} user={user} />
         ) : (
           <EmptyScreen />
         )}

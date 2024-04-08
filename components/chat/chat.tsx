@@ -57,7 +57,7 @@ export function Chat({ id, className, user }: ChatProps) {
         className={cn('pb-[200px] pt-4 md:pt-10', className)}
         ref={messagesRef}
       >
-        {messages.length ? (
+        {messages?.length ? (
           <ChatList messages={messages} isShared={false} user={user} />
         ) : (
           <EmptyScreen />

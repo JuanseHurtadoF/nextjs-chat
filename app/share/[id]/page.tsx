@@ -18,7 +18,7 @@ interface SharePageProps {
   }
 }
 
-export async function getSharedChat(id: string) {
+async function getSharedChat(id: string) {
   'use server'
   const supabase = createClient()
   // get the messages from the chat with id
@@ -35,9 +35,7 @@ export async function getSharedChat(id: string) {
   return data
 }
 
-export async function generateMetadata({
-  params
-}: SharePageProps): Promise<Metadata> {
+async function generateMetadata({ params }: SharePageProps): Promise<Metadata> {
   const data = await getSharedChat(params.id)
 
   return {

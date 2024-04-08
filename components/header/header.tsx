@@ -1,14 +1,7 @@
 import * as React from 'react'
-import Link from 'next/link'
-import { IconNextChat } from '@/components/ui/icons'
-import { ProfileDropDown } from '@/components/ui/profile-dropdown'
-import useGetUser from '@/lib/hooks/use-get-user'
 import { createClient } from '@/lib/supabase/server'
 import { Sidebar } from '@/components/sidebar/sidebar'
 import { SidebarList } from '@/components/sidebar/sidebar-list'
-import { SidebarFooter } from '@/components/sidebar/sidebar-footer'
-import { ThemeToggle } from '@/components/ui/theme-toggle'
-import { ClearHistory } from '@/components/sidebar/clear-history'
 
 export async function Header() {
   const supabase = createClient()

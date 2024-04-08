@@ -21,7 +21,7 @@ import { useState } from 'react'
 
 interface ChatShareDialogProps extends DialogProps {
   chat: Chat
-  shareChat?: (chat: Chat) => ServerActionResult<Chat>
+  shareChat?: (chat: Chat) => ServerActionResult<void>
   onCopy: () => void
 }
 

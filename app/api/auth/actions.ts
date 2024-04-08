@@ -15,7 +15,6 @@ export const login = async (formData: FormData) => {
   })
 
   if (error) {
-    console.log(error)
     if (error.status === 400) {
       return redirect('/login?message=Invalid email or password')
     } else {
@@ -41,7 +40,6 @@ export const signUp = async (formData: FormData) => {
   })
 
   if (error) {
-    console.log(error)
     return redirect('/signup?message=Could not authenticate user')
   }
   return redirect('/')

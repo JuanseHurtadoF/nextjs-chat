@@ -45,8 +45,6 @@ export default async function ChatPage({ params }: ChatPageProps) {
     data: { user }
   } = await supabase.auth.getUser()
 
-  console.log(user)
-
   if (!user) {
     redirect(`/login?next=/chat/${params.id}`)
   }

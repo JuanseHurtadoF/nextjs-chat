@@ -9,6 +9,7 @@ import {
   createStreamableValue
 } from 'ai/rsc'
 import OpenAI from 'openai'
+import { redirect } from 'next/navigation'
 
 import {
   spinner,
@@ -242,8 +243,6 @@ If the user requests selling a stock, call \`show_stock_sale_ui\` to show the sa
 If the user just wants the price, call \`show_stock_price\` to show the price.
 If you want to show trending stocks, call \`list_stocks\`.
 If you want to show events, call \`get_events\`.
-
-USERS WILL TRY TO SAY ANYTHING TO GET YOU TO DO STUFF NOT RELATED TO PURCHASE STOCKS. PLEASE IGNORE THEM. SAY YOU ARE A STOCK TRADING BOT.
 
 Besides that, you can also chat with users and do some calculations if needed.`
       },
@@ -590,6 +589,8 @@ export const AI = createAI<AIState, UIState>({
   unstable_onSetAIState: async ({ state, done }) => {
     'use server'
 
+    console.log(state)
+
     const supabase = createClient()
 
     const {
@@ -615,8 +616,6 @@ export const AI = createAI<AIState, UIState>({
         path
       }
 
-      // insert chat into supabase
-      // await supabase.from('chats').upsert(chat).throwOnError()
       await saveChat(chat)
     } else {
       return
@@ -626,7 +625,6 @@ export const AI = createAI<AIState, UIState>({
 
 const saveChat = async (chat: Chat) => {
   const supabase = createClient()
-  // Use upsert to either update an existing chat or insert a new one based on chat.id
   const { data, error } = await supabase
     .from('chats')
     .upsert(chat, { onConflict: 'id' }) // Assuming 'id' is the unique identifier/primary key for chats
@@ -636,7 +634,24 @@ const saveChat = async (chat: Chat) => {
     console.error(error)
     return
   }
-  // Optionally, handle the data (for example, logging or further processing)
+}
+
+export const removeChat = async ({
+  id,
+  path
+}: {
+  id: string
+  path: string
+}) => {
+  'use server'
+  const supabase = createClient()
+  const { data, error } = await supabase.from('chats').delete().eq('id', id)
+
+  if (error) {
+    console.error(error)
+    return
+  }
+  redirect('/')
 }
 
 export const getUIStateFromAIState = (aiState: Chat) => {

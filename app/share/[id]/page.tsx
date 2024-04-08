@@ -2,10 +2,12 @@ import { type Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 
 import { formatDate } from '@/lib/utils'
-import { getSharedChat } from '@/app/actions'
+// import { getSharedChat } from '@/app/actions'
 import { ChatList } from '@/components/chat/chat-list'
 import { FooterText } from '@/components/footer/footer'
 import { AI, UIState, getUIStateFromAIState } from '@/lib/chat/actions'
+import { createClient } from '@/lib/supabase/server'
+import { Chat } from '@/lib/types'
 
 export const runtime = 'edge'
 export const preferredRegion = 'home'
@@ -16,20 +18,37 @@ interface SharePageProps {
   }
 }
 
+export async function getSharedChat(id: string) {
+  'use server'
+  const supabase = createClient()
+  // get the messages from the chat with id
+  const { data, error } = await supabase
+    .from('chats')
+    .select('*')
+    .eq('id', id)
+    .single()
+
+  if (error || !data) {
+    return null
+  }
+
+  return data
+}
+
 export async function generateMetadata({
   params
 }: SharePageProps): Promise<Metadata> {
-  const chat = await getSharedChat(params.id)
+  const data = await getSharedChat(params.id)
 
   return {
-    title: chat?.title.slice(0, 50) ?? 'Chat'
+    title: data?.title.slice(0, 50) ?? 'Chat'
   }
 }
 
 export default async function SharePage({ params }: SharePageProps) {
   const chat = await getSharedChat(params.id)
 
-  if (!chat || !chat?.sharePath) {
+  if (!chat || !chat.share_path) {
     notFound()
   }
 

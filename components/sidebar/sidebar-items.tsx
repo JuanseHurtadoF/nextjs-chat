@@ -1,42 +1,48 @@
-'use client'
-
 import { Chat } from '@/lib/types'
-import { AnimatePresence, motion } from 'framer-motion'
-
-// import { removeChat, shareChat } from '@/app/actions'
-
 import { SidebarActions } from '@/components/sidebar/sidebar-actions'
 import { SidebarItem } from '@/components/sidebar/sidebar-item'
+import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
+import { removeChat } from '@/lib/chat/actions'
 
 interface SidebarItemsProps {
   chats?: Chat[]
+}
+
+export async function shareChat(chat: Chat) {
+  'use server'
+  const supabase = createClient()
+  const newChat = {
+    ...chat,
+    sharePath: `/share/${chat.id}`
+  }
+
+  // update chat where id is chat.id
+  const { error } = await supabase
+    .from('chats')
+    .update(newChat)
+    .eq('id', chat.id)
 }
 
 export function SidebarItems({ chats }: SidebarItemsProps) {
   if (!chats?.length) return null
 
   return (
-    <AnimatePresence>
-      {chats.map(
+    <div>
+      {chats?.map(
         (chat, index) =>
           chat && (
-            <motion.div
-              key={chat?.id}
-              exit={{
-                opacity: 0,
-                height: 0
-              }}
-            >
-              {/* <SidebarItem index={index} chat={chat}>
+            <div key={chat?.id}>
+              <SidebarItem index={index} chat={chat}>
                 <SidebarActions
                   chat={chat}
-                  // removeChat={removeChat}
-                  // shareChat={shareChat}
+                  removeChat={removeChat}
+                  shareChat={shareChat}
                 />
-              </SidebarItem> */}
-            </motion.div>
+              </SidebarItem>
+            </div>
           )
       )}
-    </AnimatePresence>
+    </div>
   )
 }

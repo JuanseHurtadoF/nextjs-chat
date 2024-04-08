@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 import { SidebarActions } from '@/components/sidebar/sidebar-actions'
 import { SidebarItem } from '@/components/sidebar/sidebar-item'
+import { useEffect } from 'react'
 
 interface SidebarItemsProps {
   chats?: Chat[]
@@ -17,7 +18,7 @@ export function SidebarItems({ chats }: SidebarItemsProps) {
 
   return (
     <AnimatePresence>
-      {chats.map(
+      {chats?.map(
         (chat, index) =>
           chat && (
             <motion.div
@@ -27,13 +28,13 @@ export function SidebarItems({ chats }: SidebarItemsProps) {
                 height: 0
               }}
             >
-              {/* <SidebarItem index={index} chat={chat}>
+              <SidebarItem index={index} chat={chat}>
                 <SidebarActions
                   chat={chat}
                   // removeChat={removeChat}
                   // shareChat={shareChat}
                 />
-              </SidebarItem> */}
+              </SidebarItem>
             </motion.div>
           )
       )}

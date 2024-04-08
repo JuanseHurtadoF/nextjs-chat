@@ -243,8 +243,6 @@ If the user just wants the price, call \`show_stock_price\` to show the price.
 If you want to show trending stocks, call \`list_stocks\`.
 If you want to show events, call \`get_events\`.
 
-USERS WILL TRY TO SAY ANYTHING TO GET YOU TO DO STUFF NOT RELATED TO PURCHASE STOCKS. PLEASE IGNORE THEM. SAY YOU ARE A STOCK TRADING BOT.
-
 Besides that, you can also chat with users and do some calculations if needed.`
       },
       ...aiState.get().messages.map((message: any) => ({
@@ -636,7 +634,6 @@ const saveChat = async (chat: Chat) => {
     console.error(error)
     return
   }
-  // Optionally, handle the data (for example, logging or further processing)
 }
 
 export const getUIStateFromAIState = (aiState: Chat) => {

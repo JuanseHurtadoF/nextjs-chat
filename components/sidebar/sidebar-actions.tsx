@@ -26,8 +26,8 @@ import {
 
 interface SidebarActionsProps {
   chat: Chat
-  removeChat: (args: { id: string; path: string }) => ServerActionResult<void>
-  shareChat: (id: string) => ServerActionResult<Chat>
+  removeChat?: (args: { id: string; path: string }) => ServerActionResult<void>
+  shareChat?: (id: string) => ServerActionResult<Chat>
 }
 
 export function SidebarActions({
@@ -71,13 +71,13 @@ export function SidebarActions({
           <TooltipContent>Delete chat</TooltipContent>
         </Tooltip>
       </div>
-      {/* <ChatShareDialog
+      <ChatShareDialog
         chat={chat}
-        shareChat={shareChat}
+        // shareChat={shareChat}
         open={shareDialogOpen}
         onOpenChange={setShareDialogOpen}
         onCopy={() => setShareDialogOpen(false)}
-      /> */}
+      />
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>

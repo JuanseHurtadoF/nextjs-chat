@@ -26,14 +26,14 @@ import {
 
 interface SidebarActionsProps {
   chat: Chat
-  removeChat?: (args: { id: string; path: string }) => ServerActionResult<void>
-  shareChat?: (id: string) => ServerActionResult<Chat>
+  removeChat: (args: { id: string; path: string }) => ServerActionResult<void>
+  shareChat: (chat: Chat) => ServerActionResult<Chat>
 }
 
 export function SidebarActions({
-  chat
-  // removeChat,
-  // shareChat
+  chat,
+  removeChat,
+  shareChat
 }: SidebarActionsProps) {
   const router = useRouter()
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false)
@@ -73,7 +73,7 @@ export function SidebarActions({
       </div>
       <ChatShareDialog
         chat={chat}
-        // shareChat={shareChat}
+        shareChat={shareChat}
         open={shareDialogOpen}
         onOpenChange={setShareDialogOpen}
         onCopy={() => setShareDialogOpen(false)}
@@ -91,7 +91,7 @@ export function SidebarActions({
             <AlertDialogCancel disabled={isRemovePending}>
               Cancel
             </AlertDialogCancel>
-            {/* <AlertDialogAction
+            <AlertDialogAction
               disabled={isRemovePending}
               onClick={event => {
                 event.preventDefault()
@@ -116,7 +116,7 @@ export function SidebarActions({
             >
               {isRemovePending && <IconSpinner className="mr-2 animate-spin" />}
               Delete
-            </AlertDialogAction> */}
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

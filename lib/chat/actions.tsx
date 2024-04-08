@@ -9,6 +9,7 @@ import {
   createStreamableValue
 } from 'ai/rsc'
 import OpenAI from 'openai'
+import { redirect } from 'next/navigation'
 
 import {
   spinner,
@@ -588,6 +589,8 @@ export const AI = createAI<AIState, UIState>({
   unstable_onSetAIState: async ({ state, done }) => {
     'use server'
 
+    console.log(state)
+
     const supabase = createClient()
 
     const {
@@ -613,8 +616,6 @@ export const AI = createAI<AIState, UIState>({
         path
       }
 
-      // insert chat into supabase
-      // await supabase.from('chats').upsert(chat).throwOnError()
       await saveChat(chat)
     } else {
       return
@@ -624,7 +625,6 @@ export const AI = createAI<AIState, UIState>({
 
 const saveChat = async (chat: Chat) => {
   const supabase = createClient()
-  // Use upsert to either update an existing chat or insert a new one based on chat.id
   const { data, error } = await supabase
     .from('chats')
     .upsert(chat, { onConflict: 'id' }) // Assuming 'id' is the unique identifier/primary key for chats
@@ -634,6 +634,24 @@ const saveChat = async (chat: Chat) => {
     console.error(error)
     return
   }
+}
+
+export const removeChat = async ({
+  id,
+  path
+}: {
+  id: string
+  path: string
+}) => {
+  'use server'
+  const supabase = createClient()
+  const { data, error } = await supabase.from('chats').delete().eq('id', id)
+
+  if (error) {
+    console.error(error)
+    return
+  }
+  redirect('/')
 }
 
 export const getUIStateFromAIState = (aiState: Chat) => {

@@ -17,7 +17,6 @@ export async function shareChat(chat: Chat) {
     sharePath: `/share/${chat.id}`
   }
 
-  // update chat where id is chat.id
   const { error } = await supabase
     .from('chats')
     .update(newChat)

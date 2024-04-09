@@ -12,9 +12,8 @@ export default async function SignUpPage({
     data: { user }
   } = await supabase.auth.getUser()
 
-  // If user is already logged in, redirect to home page
   if (user) {
-    // return redirect("/");
+    return redirect('/')
   }
 
   return (

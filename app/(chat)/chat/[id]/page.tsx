@@ -23,7 +23,6 @@ export async function generateMetadata({
     return {}
   }
 
-  // get chat from supabase
   const { data, error } = await supabase
     .from('chat')
     .select('*')

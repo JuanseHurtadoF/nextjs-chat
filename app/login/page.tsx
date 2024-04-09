@@ -7,7 +7,6 @@ export default async function LoginPage({
 }: {
   searchParams: { message: string }
 }) {
-  // Check for existing session
   const supabase = createClient()
   const {
     data: { user }

@@ -376,22 +376,6 @@ Besides that, you can also chat with users and do some calculations if needed.`
             )
         }),
         render: async function* ({ symbol, price, numberOfShares = 100 }) {
-          // if (numberOfShares <= 0 || numberOfShares > 1000) {
-          //   aiState.done({
-          //     ...aiState.get(),
-          //     messages: [
-          //       ...aiState.get().messages,
-          //       {
-          //         id: nanoid(),
-          //         role: 'system',
-          //         content: `[User has selected an invalid amount]`
-          //       }
-          //     ]
-          //   })
-
-          //   return <BotMessage content={'Invalid amount'} />
-          // }
-
           aiState.done({
             ...aiState.get(),
             messages: [
@@ -573,8 +557,6 @@ export const AI = createAI<AIState, UIState>({
       data: { user }
     } = await supabase.auth.getUser()
 
-    // If user is already logged in, redirect to home page
-
     if (user) {
       const aiState = getAIState()
 
@@ -589,15 +571,11 @@ export const AI = createAI<AIState, UIState>({
   unstable_onSetAIState: async ({ state, done }) => {
     'use server'
 
-    console.log(state)
-
     const supabase = createClient()
 
     const {
       data: { user }
     } = await supabase.auth.getUser()
-
-    // If user is already logged in, redirect to home page
 
     if (user) {
       const { chatId, messages } = state

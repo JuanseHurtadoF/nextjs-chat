@@ -8,7 +8,6 @@ export const metadata = {
 
 export default async function IndexPage() {
   const id = nanoid()
-  // const session = (await auth()) as Session
 
   return (
     <AI initialAIState={{ chatId: id, messages: [] }}>

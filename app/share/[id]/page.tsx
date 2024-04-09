@@ -19,7 +19,6 @@ interface SharePageProps {
 async function getSharedChat(id: string) {
   'use server'
   const supabase = createClient()
-  // get the messages from the chat with id
   const { data, error } = await supabase
     .from('chats')
     .select('*')

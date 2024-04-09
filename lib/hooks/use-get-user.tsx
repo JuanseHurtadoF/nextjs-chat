@@ -1,37 +1,37 @@
-import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client"; // Ensure this is your correct path
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase/client' // Ensure this is your correct path
 
 // This function initializes the Supabase client; ensure it's correctly set up.
-const supabase = createClient();
+const supabase = createClient()
 
 function useGetUser() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
     const checkUserSession = async () => {
       const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      setIsLoggedIn(!!session);
-    };
+        data: { session }
+      } = await supabase.auth.getSession()
+      setIsLoggedIn(!!session)
+    }
 
     // Initially check if the user is logged in
-    checkUserSession();
+    checkUserSession()
 
     // Listen for changes in auth state
     const {
-      data: { subscription },
+      data: { subscription }
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsLoggedIn(!!session);
-    });
+      setIsLoggedIn(!!session)
+    })
 
     // Cleanup subscription on unmount
     return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
+      subscription.unsubscribe()
+    }
+  }, [])
 
-  return { isLoggedIn };
+  return { isLoggedIn }
 }
 
-export default useGetUser;
+export default useGetUser

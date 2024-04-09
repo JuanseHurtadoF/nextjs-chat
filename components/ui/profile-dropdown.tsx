@@ -1,6 +1,5 @@
 import { AvatarDemo } from './avatar'
 import { createClient } from '@/lib/supabase/client'
-import { redirect } from 'next/navigation'
 
 import {
   DropdownMenu,
@@ -15,31 +14,26 @@ import { IconExit, IconProfile, IconSettings } from './icons'
 async function logOut() {
   const supabase = createClient()
   await supabase.auth.signOut()
-
-  return redirect('/login')
+  window.location.reload()
 }
 
-export function ProfileDropDown() {
+export function ProfileDropDown({ user }: { user: any }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <AvatarDemo />
+        <AvatarDemo user={user} />
       </DropdownMenuTrigger>
       <DropdownMenuContent sideOffset={5}>
-        <DropdownMenuItem className="flex gap-2">
-          <IconProfile className="size-4" />
-          Profile
+        <DropdownMenuItem className="flex gap-2" disabled>
+          {`${user?.email.slice(0, 20)}...`}
         </DropdownMenuItem>
-        <DropdownMenuItem className="flex gap-2">
-          <IconSettings className="size-4 mr-4" />
-          Settings
-        </DropdownMenuItem>
+
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <form className="flex gap-2 items-center" action={logOut}>
+          <button onClick={logOut} className="flex gap-2 items-center w-full">
             <IconExit className="size-4 mr-4" />
-            <button type="submit">Logout</button>
-          </form>
+            Logout
+          </button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

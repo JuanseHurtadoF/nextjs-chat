@@ -1,6 +1,5 @@
 import { Separator } from '@/components/ui/separator'
 import { UIState } from '@/lib/chat/actions'
-import { Session } from '@/lib/types'
 import Link from 'next/link'
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 
@@ -15,6 +14,8 @@ export function ChatList({ messages, user, isShared }: ChatList) {
     return null
   }
 
+  console.log(user)
+
   return (
     <div className="relative mx-auto max-w-2xl px-4">
       {!isShared && !user ? (
@@ -24,17 +25,19 @@ export function ChatList({ messages, user, isShared }: ChatList) {
               <ExclamationTriangleIcon />
             </div>
             <div className="ml-4 flex-1 space-y-2 overflow-hidden px-1">
-              <p className="text-muted-foreground leading-normal">
-                Please{' '}
-                <Link href="/login" className="underline">
-                  log in
-                </Link>{' '}
-                or{' '}
-                <Link href="/signup" className="underline">
-                  sign up
-                </Link>{' '}
-                to save and revisit your chat history!
-              </p>
+              {!user && (
+                <p className="text-muted-foreground leading-normal">
+                  Please{' '}
+                  <Link href="/login" className="underline">
+                    log in
+                  </Link>{' '}
+                  or{' '}
+                  <Link href="/signup" className="underline">
+                    sign up
+                  </Link>{' '}
+                  to save and revisit your chat history!
+                </p>
+              )}
             </div>
           </div>
           <Separator className="my-4" />

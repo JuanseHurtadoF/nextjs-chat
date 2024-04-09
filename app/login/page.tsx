@@ -1,6 +1,6 @@
 import { LoginForm } from '@/components/auth/login-form'
-import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
 
 export default async function LoginPage({
   searchParams
@@ -13,7 +13,6 @@ export default async function LoginPage({
     data: { user }
   } = await supabase.auth.getUser()
 
-  // If user is already logged in, redirect to home page
   if (user) {
     return redirect('/')
   }

@@ -87,3 +87,8 @@ export const getMessageFromCode = (resultCode: string) => {
       return 'Logged in!'
   }
 }
+
+export function getUserInitials(name: string) {
+  const [firstName, lastName] = name.split(' ')
+  return lastName ? `${firstName[0]}${lastName[0]}` : firstName.slice(0, 2)
+}

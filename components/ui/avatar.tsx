@@ -2,6 +2,7 @@
 import * as React from 'react'
 import * as AvatarPrimitive from '@radix-ui/react-avatar'
 import { cn } from '@/lib/utils'
+import { getUserInitials } from '@/lib/utils'
 
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
@@ -45,13 +46,14 @@ const AvatarFallback = React.forwardRef<
 ))
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
 
-function AvatarDemo() {
+function AvatarDemo({ user }: { user: any }) {
   return (
     <div className="cursor-pointer">
       <Avatar>
         {/* <AvatarImage src="path/to/user/avatar.jpg" alt="User name" /> */}
-        <AvatarFallback delayMs={600}>JH</AvatarFallback>
-        {/* <ProfileDropDown /> */}
+        <AvatarFallback>
+          {getUserInitials(user?.email ? user.email : '').toUpperCase()}
+        </AvatarFallback>
       </Avatar>
     </div>
   )

@@ -34,12 +34,12 @@ To create chats table:
 -- Create the chats table with an added share_path column
 CREATE TABLE chats (
 id TEXT PRIMARY KEY,
-userId UUID NOT NULL,
+user_id UUID NOT NULL,
 title TEXT,
 path TEXT UNIQUE NOT NULL,
 share_path TEXT UNIQUE, -- This column is added to store a unique sharing identifier
 messages JSONB NOT NULL,
-createdAt TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Enable RLS on the chats table
@@ -48,27 +48,26 @@ ALTER TABLE chats ENABLE ROW LEVEL SECURITY;
 -- Create a policy to allow users to select (view) their own chats
 CREATE POLICY select_own_chats ON chats
 FOR SELECT
-USING (userId = auth.uid());
+USING (user_id = auth.uid());
 
 -- Create a policy to allow users to insert (create) new chats
--- Ensures the userId in the new row matches the current user's ID and allows specifying createdAt
+-- Ensures the user_id in the new row matches the current user's ID and allows specifying created_at
 CREATE POLICY insert_own_chats ON chats
 FOR INSERT
-WITH CHECK (userId = auth.uid());
+WITH CHECK (user_id = auth.uid());
 
--- Update the insert_own_chats policy if you need to enforce specific rules for the createdAt or share_path columns
+-- Update the insert_own_chats policy if you need to enforce specific rules for the created_at or share_path columns
 
 -- Create a policy to allow users to update their own chats
 CREATE POLICY update_own_chats ON chats
 FOR UPDATE
-USING (userId = auth.uid())
-WITH CHECK (userId = auth.uid()); -- Ensure updates can only be made if the userId matches
+USING (user_id = auth.uid())
+WITH CHECK (user_id = auth.uid()); -- Ensure updates can only be made if the user_id matches
 
 -- Create a policy to allow users to delete their own chats
 CREATE POLICY delete_own_chats ON chats
 FOR DELETE
-USING (userId = auth.uid());
-
+USING (user_id = auth.uid());
 ```
 
 To create profiles table:
